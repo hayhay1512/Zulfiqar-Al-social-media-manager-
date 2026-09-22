@@ -7,6 +7,7 @@ on:
       - master
   workflow_dispatch:
 
+# Permissions needed for GitHub Pages deployment
 permissions:
   contents: read
   pages: write
@@ -14,7 +15,7 @@ permissions:
 
 concurrency:
   group: 'pages'
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build-and-deploy:
@@ -23,20 +24,22 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci || npm install
+        run: npm install
 
-      - name: Build static site with Vite
-        run: npx vite build
+      - name: Build static site
+        run: npm run build:client
+
+      - name: Ensure 404.html fallback for client-side routing
+        run: cp dist/index.html dist/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
