@@ -11,6 +11,7 @@ import { BrandKitManager } from './components/BrandKitManager';
 import { ContentLibrary } from './components/ContentLibrary';
 import { OnboardingWizard } from './components/OnboardingWizard';
 import { GraphicCanvas } from './components/GraphicCanvas';
+import { LeadFormModal } from './components/LeadFormModal';
 import {
   LayoutDashboard,
   Bot,
@@ -53,6 +54,7 @@ export default function App() {
   const [socialAccounts, setSocialAccounts] = useState<SocialAccount[]>(INITIAL_SOCIAL_ACCOUNTS);
   const [selectedPost, setSelectedPost] = useState<PostItem | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showLeadModal, setShowLeadModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -183,6 +185,15 @@ export default function App() {
         />
       )}
 
+      {/* Lead Generation Form Modal */}
+      <LeadFormModal
+        isOpen={showLeadModal}
+        onClose={() => setShowLeadModal(false)}
+        onSubmitSuccess={(lead) => {
+          showToast(`Lead received for ${lead.name}! Our team will get in touch.`);
+        }}
+      />
+
       {/* Sidebar Navigation (Desktop) */}
       <aside className="hidden md:flex flex-col w-64 bg-slate-900/90 border-r border-slate-800/80 p-4 justify-between shrink-0">
         <div className="space-y-6">
@@ -249,8 +260,8 @@ export default function App() {
           </nav>
         </div>
 
-        {/* Bottom Workspace Badge */}
-        <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+        {/* Bottom Workspace Badge & Lead Button */}
+        <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2.5">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-white truncate max-w-[140px]">
               {brandKit.businessName}
@@ -258,6 +269,15 @@ export default function App() {
             <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
           </div>
           <p className="text-[10px] text-slate-400 truncate">{brandKit.niche}</p>
+          
+          <button
+            onClick={() => setShowLeadModal(true)}
+            className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-[11px] font-bold shadow-md shadow-emerald-500/20 transition-all cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Get a Quote / Hire Us</span>
+          </button>
+
           <button
             onClick={() => setShowOnboarding(true)}
             className="w-full text-center text-[10px] text-emerald-400 hover:text-emerald-300 font-semibold pt-1 border-t border-slate-800/80"
@@ -539,6 +559,27 @@ export default function App() {
             />
           )}
         </main>
+
+        {/* Global Application Footer */}
+        <footer className="border-t border-slate-800 bg-slate-950/80 px-4 py-3 shrink-0 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span className="text-slate-300 font-medium">Zulfiqar AI Social Media Manager &bull; v2.4</span>
+            <span className="text-slate-600 hidden sm:inline">|</span>
+            <span className="text-slate-500 hidden sm:inline">Meta Ads, Content Calendar & AI Creative Generation</span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              id="footer-open-lead-form-btn"
+              onClick={() => setShowLeadModal(true)}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md shadow-emerald-500/20 transition-all cursor-pointer hover:scale-105 active:scale-95"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Get a Quote / Contact Us</span>
+            </button>
+          </div>
+        </footer>
       </div>
     </div>
   );
