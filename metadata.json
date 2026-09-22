@@ -1,0 +1,6 @@
+{
+  "name": "Zulfiqar AI Social Media Manager",
+  "description": "An AI-powered social media management platform to plan, create, design, schedule, publish, and analyze content.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
